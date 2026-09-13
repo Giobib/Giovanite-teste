@@ -211,6 +211,19 @@
   }
 }
 
+/* Variante destrutiva: usada na confirmação de exclusão. */
+.button--danger {
+  color: var(--color-text-inverse);
+  background: var(--color-danger);
+  border-color: transparent;
+}
+
+.button--danger:hover:not([disabled]) {
+  background: #ff6680;
+  border-color: transparent;
+  box-shadow: 0 0 18px rgba(255, 77, 109, 0.45);
+}
+
 .button--block {
   width: 100%;
 }
@@ -611,6 +624,259 @@
   width: 28px;
   height: 28px;
   font-size: var(--fs-xs);
+}
+
+/* ==========================================================================
+   Modal (.modal) — elemento <dialog> nativo
+   ========================================================================== */
+
+.modal {
+  /* O reset zera margens em tudo; o <dialog> precisa de auto para centrar. */
+  margin: auto;
+  width: min(560px, calc(100vw - 2 * var(--space-sm)));
+  max-height: min(86vh, 760px);
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal::backdrop {
+  background: rgba(3, 5, 10, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal[open] {
+  animation: modal-in 260ms var(--ease-out);
+}
+
+.modal[open]::backdrop {
+  animation: backdrop-in 260ms var(--ease-out);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Fio de luz no topo, como no cartão de login. */
+.modal__form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.modal__form::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-neon), var(--color-accent), transparent);
+}
+
+.modal__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md) var(--space-sm);
+}
+
+.modal__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+}
+
+.modal__subtitle {
+  margin-top: var(--space-3xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.modal__close {
+  margin-left: auto;
+  margin-top: -4px;
+}
+
+.modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: 0 var(--space-md) var(--space-md);
+  overflow-y: auto;
+}
+
+.modal__row {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.modal__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2xs);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Variante de confirmação: mais estreita e sem corpo rolável. */
+.modal--confirm {
+  width: min(420px, calc(100vw - 2 * var(--space-sm)));
+}
+
+.modal__danger-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--color-danger);
+  background: rgba(255, 77, 109, 0.12);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  border-radius: var(--radius-md);
+}
+
+.modal__danger-mark svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================================
+   Controles de formulário do modal
+   ========================================================================== */
+
+.field__textarea {
+  width: 100%;
+  min-height: 78px;
+  padding: var(--space-xs);
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.field__textarea:focus {
+  outline: none;
+  border-color: var(--color-neon);
+  box-shadow: 0 0 0 3px var(--color-neon-soft);
+}
+
+.field__select {
+  width: 100%;
+  padding: var(--space-xs);
+  font-size: var(--fs-md);
+  color: var(--color-text);
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  /* Seta desenhada em CSS: a nativa não segue o tema. */
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.field__select:focus {
+  outline: none;
+  border-color: var(--color-neon);
+  box-shadow: 0 0 0 3px var(--color-neon-soft);
+}
+
+.field__select option {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+/* Seletor de ícone: grade de botões-rádio. */
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.picker input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.picker__option {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.picker__option svg {
+  width: 20px;
+  height: 20px;
+}
+
+.picker__option:hover {
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+.picker input:checked + .picker__option {
+  color: var(--color-neon);
+  background: var(--color-neon-soft);
+  border-color: var(--color-neon);
+  box-shadow: var(--glow-neon);
+}
+
+.picker input:focus-visible + .picker__option {
+  outline: 2px solid var(--color-neon);
+  outline-offset: 2px;
+}
+
+/* Seletor de cor: mesma mecânica, amostra redonda. */
+.picker--color .picker__option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 1px var(--color-border-strong);
+}
+
+.picker--color input:checked + .picker__option {
+  /* Repete o fundo: a regra genérica de :checked pintaria a amostra de neon. */
+  background: var(--swatch);
+  border-color: var(--color-bg);
+  box-shadow: 0 0 0 2px var(--swatch), 0 0 14px var(--swatch);
 }
 
 /* ==========================================================================

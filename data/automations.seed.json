@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "automations": [
+    {
+      "id": "atm-001",
+      "nome": "Backup diário",
+      "descricao": "Copia os arquivos do projeto para o storage às 02h.",
+      "categoria": "Infraestrutura",
+      "icone": "database",
+      "cor": "#00f0ff",
+      "tipoAcao": "agendada"
+    },
+    {
+      "id": "atm-002",
+      "nome": "Alerta de falha",
+      "descricao": "Notifica o time no chat quando um job termina com erro.",
+      "categoria": "Monitoramento",
+      "icone": "bell",
+      "cor": "#ff4d6d",
+      "tipoAcao": "webhook"
+    },
+    {
+      "id": "atm-003",
+      "nome": "Relatório semanal",
+      "descricao": "Envia o resumo de execuções por e-mail toda segunda-feira.",
+      "categoria": "Relatórios",
+      "icone": "chart",
+      "cor": "#7b5cff",
+      "tipoAcao": "agendada"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nexus Desk — painel de automações.">
+  <title>Nexus Desk — Dashboard</title>
+
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="page page--dashboard">
+
+  <div class="layout">
+
+    <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+      <div class="sidebar__brand">Nexus Desk</div>
+      <nav class="sidebar__nav">
+        <ul>
+          <li><a class="sidebar__link is-active" href="dashboard.html">Automações</a></li>
+          <li><a class="sidebar__link" href="#">Execuções</a></li>
+          <li><a class="sidebar__link" href="#">Integrações</a></li>
+          <li><a class="sidebar__link" href="#">Configurações</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="layout__main">
+
+      <header class="header">
+        <button class="header__toggle" id="sidebar-toggle" type="button"
+                aria-controls="sidebar" aria-expanded="true">Menu</button>
+        <input class="header__search" type="search" id="global-search"
+               placeholder="Buscar automações…" aria-label="Busca global">
+        <div class="header__user">
+          <span id="current-user" class="header__email">—</span>
+          <button class="button" id="logout-button" type="button">Sair</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="content__title">Minhas automações</h1>
+        <section class="grid" id="automations-grid" aria-live="polite">
+          <!-- Cards de automação: renderizados a partir do Prompt 3/4. -->
+        </section>
+      </main>
+
+      <button class="fab" id="new-automation" type="button"
+              aria-label="Nova automação">+</button>
+
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

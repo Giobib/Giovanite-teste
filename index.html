@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nexus Desk — acesso ao painel de automações.">
+  <title>Nexus Desk — Login</title>
+
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="page page--login">
+
+  <main class="login">
+    <section class="login__card" aria-labelledby="login-title">
+      <header class="login__header">
+        <h1 id="login-title" class="login__brand">Nexus Desk</h1>
+        <p class="login__subtitle">Entre para acessar seu painel de automações.</p>
+      </header>
+
+      <form id="login-form" class="login__form" novalidate>
+        <div class="field">
+          <label class="field__label" for="email">E-mail</label>
+          <input class="field__input" type="email" id="email" name="email"
+                 autocomplete="email" placeholder="voce@empresa.com" required>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="password">Senha</label>
+          <input class="field__input" type="password" id="password" name="password"
+                 autocomplete="current-password" placeholder="••••••••" required>
+        </div>
+
+        <div class="login__options">
+          <label class="checkbox" for="remember">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Lembrar-me</span>
+          </label>
+          <a class="link" href="#">Esqueci minha senha</a>
+        </div>
+
+        <button class="button button--primary" type="submit">Entrar</button>
+
+        <p id="login-feedback" class="login__feedback" role="status" aria-live="polite" hidden></p>
+      </form>
+
+      <footer class="login__footer">
+        <p>Não tem conta? <a class="link" href="#">Criar conta</a></p>
+      </footer>
+    </section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

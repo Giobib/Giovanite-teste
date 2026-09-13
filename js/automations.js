@@ -195,6 +195,8 @@
     // Cards são recriados a cada render: o arrasto precisa ser religado.
     ui.makeSortable(grid, {
       itemSelector: '.card',
+      handleSelector: '[data-drag-handle]',
+      describe: (card) => card.dataset.name,
       onReorder(ids) {
         repo.reorder(ids);
         toast.info('Ordem salva.');
@@ -222,13 +224,15 @@
               <span class="badge badge--muted">${escapeHtml(actionName(automation.tipoAcao))}</span>
             </div>
           </div>
-          <span class="card__grip" aria-hidden="true" title="Arraste para reordenar">
-            <svg viewBox="0 0 24 24" fill="currentColor">
+          <button class="card__grip" type="button" data-drag-handle aria-pressed="false"
+                  aria-label="Reordenar ${nome}. Enter para pegar, setas para mover."
+                  title="Arraste, ou use Enter e as setas">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/>
               <circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/>
               <circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>
             </svg>
-          </span>
+          </button>
           <button class="icon-button card__menu" type="button" data-action="delete"
                   aria-label="Excluir ${nome}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -515,8 +519,9 @@
         return;
       }
 
-      // O interruptor cuida de si mesmo no evento change.
+      // O interruptor e a alça de arrasto cuidam de si mesmos.
       if (event.target.closest('[data-action="toggle"]')) return;
+      if (event.target.closest('[data-drag-handle]')) return;
 
       openForm(automation);
     });

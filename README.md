@@ -102,7 +102,10 @@ e compartilham o namespace `window.NexusDesk`, evitando variáveis globais solta
 | Tecla | Ação |
 | --- | --- |
 | `/` | Foca a busca global |
-| `Esc` | Fecha menus, modais e o drawer |
+| `Esc` | Fecha menus, modais e o drawer; cancela uma reordenação em curso |
+| `Enter` / `Espaço` | Na alça do card: pega para reordenar, e solta |
+| `←` `→` | Move o card pego uma posição |
+| `↑` `↓` | Move o card pego uma linha inteira do grid |
 
 ## Fluxo de navegação (implementado)
 
@@ -120,4 +123,16 @@ dashboard.html ──[botão "Sair"]──► limpa sessão ──────�
 - **Prompt 3** — dashboard com sidebar recolhível, header, grid responsivo e FAB.
 - **Prompt 4** — CRUD de automações com LocalStorage e modais.
 - **Prompt 5** — drag & drop, toasts, tema claro/escuro, skeleton e modularização.
+
+## Reordenação acessível
+
+Os cards podem ser reordenados de três formas, todas terminando na mesma
+gravação:
+
+- **Mouse** — HTML5 Drag and Drop API, arrastando o card.
+- **Toque** — Pointer Events pela alça do card. `touch-action: none` na alça
+  impede o navegador de rolar a página no lugar de arrastar; o resto da tela
+  continua rolando normalmente.
+- **Teclado** — `Enter` na alça pega o card, as setas movem, `Enter` solta e
+  `Esc` desfaz. Cada passo é anunciado por uma região `aria-live`.
 

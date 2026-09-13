@@ -10,6 +10,7 @@
     SESSION: 'nexus:session',
     REMEMBERED_EMAIL: 'nexus:remembered-email',
     THEME: 'nexus:theme',
+    SIDEBAR_COLLAPSED: 'nexus:sidebar-collapsed',
     AUTOMATIONS: 'nexus:automations',
     ORDER: 'nexus:automations:order',
   };

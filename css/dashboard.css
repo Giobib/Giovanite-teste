@@ -1,5 +1,838 @@
 /* ==========================================================================
    Nexus Desk — dashboard.css
-   Estilos exclusivos do dashboard (sidebar, header, grid de cards, FAB).
-   Placeholder: o layout premium será implementado no Prompt 3.
+   Layout do painel: sidebar recolhível, header, grid de automações e FAB.
+   Componentes (botões, badges, switch, dropdown) vivem em components.css.
    ========================================================================== */
+
+/* ==========================================================================
+   Estrutura
+   ========================================================================== */
+
+.page--dashboard {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.layout {
+  position: relative;
+  z-index: var(--z-base);
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  transition: grid-template-columns var(--transition-slow);
+}
+
+/* Sidebar recolhida: a coluna encolhe e os rótulos somem. */
+.layout.is-collapsed {
+  grid-template-columns: var(--sidebar-width-collapsed) minmax(0, 1fr);
+}
+
+.layout__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sidebar);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--space-sm) var(--space-xs);
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border-right: 1px solid var(--glass-border);
+}
+
+.sidebar__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs);
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+
+/* Rótulos que desaparecem quando a sidebar recolhe. */
+.sidebar__label {
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity var(--transition-base);
+}
+
+.is-collapsed .sidebar__label {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar__collapse {
+  margin-left: auto;
+}
+
+.is-collapsed .sidebar__top {
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding-inline: 0;
+}
+
+.is-collapsed .sidebar__collapse {
+  margin-left: 0;
+}
+
+.sidebar__collapse svg {
+  transition: transform var(--transition-base);
+}
+
+.is-collapsed .sidebar__collapse svg {
+  transform: rotate(180deg);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.sidebar__section {
+  padding: var(--space-2xs) var(--space-2xs) var(--space-3xs);
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.is-collapsed .sidebar__section {
+  width: 24px;
+  height: 1px;
+  margin: var(--space-2xs) auto;
+  padding: 0;
+  overflow: hidden;
+  color: transparent;
+  background: var(--color-border-strong);
+}
+
+.sidebar__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-2xs);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.sidebar__link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sidebar__link:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Estado ativo: trilho neon à esquerda, fundo tênue e ícone aceso. */
+.sidebar__link.is-active {
+  color: var(--color-text);
+  background: var(--color-neon-soft);
+}
+
+.sidebar__link.is-active::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-xs));
+  top: 50%;
+  width: 3px;
+  height: 22px;
+  background: var(--color-neon);
+  border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+  box-shadow: var(--glow-neon);
+  transform: translateY(-50%);
+}
+
+.sidebar__link.is-active svg {
+  color: var(--color-neon);
+}
+
+/* Recolhida: o rótulo vira tooltip no hover. */
+.is-collapsed .sidebar__link {
+  justify-content: center;
+}
+
+.is-collapsed .sidebar__link[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + var(--space-2xs));
+  z-index: var(--z-sidebar);
+  padding: var(--space-3xs) var(--space-2xs);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+/* Cartão de uso no rodapé da sidebar. */
+.sidebar__footer {
+  margin-top: auto;
+  padding: var(--space-xs);
+  background: var(--gradient-surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.is-collapsed .sidebar__footer {
+  display: none;
+}
+
+.sidebar__usage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.sidebar__usage strong {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.meter {
+  height: 5px;
+  background: rgba(154, 168, 199, 0.2);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.meter__fill {
+  height: 100%;
+  background: var(--gradient-neon);
+  border-radius: inherit;
+  box-shadow: var(--glow-neon);
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--header-height);
+  padding: var(--space-2xs) var(--space-md);
+  background: var(--color-overlay);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Abre o drawer no mobile; escondido no desktop. */
+.header__drawer-toggle {
+  display: none;
+}
+
+.search {
+  position: relative;
+  flex: 1;
+  /* Sem isto o item flex não encolhe abaixo da largura intrínseca do input. */
+  min-width: 0;
+  max-width: 460px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 0 var(--space-xs);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.search:focus-within {
+  border-color: var(--color-neon);
+  box-shadow: 0 0 0 3px var(--color-neon-soft);
+}
+
+.search svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2xs) 0;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.search input:focus-visible {
+  outline: none;
+}
+
+.search input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.search__hint {
+  flex-shrink: 0;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  margin-left: auto;
+}
+
+/* Gatilho do perfil: avatar + nome. */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-3xs) var(--space-2xs) var(--space-3xs) var(--space-3xs);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.profile:hover,
+.profile[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-border);
+}
+
+.profile__name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.profile__caret {
+  width: 15px;
+  height: 15px;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.profile[aria-expanded="true"] .profile__caret {
+  transform: rotate(180deg);
+}
+
+/* Item de notificação dentro do dropdown. */
+.notification {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3xs) var(--space-2xs);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-sm);
+}
+
+.notification:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.notification__dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--color-neon);
+}
+
+.notification__dot--danger { background: var(--color-danger); }
+.notification__dot--success { background: var(--color-success); }
+
+.notification__text {
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+}
+
+.notification__time {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Conteúdo
+   ========================================================================== */
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-md) var(--space-2xl);
+}
+
+.content__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.content__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+}
+
+.content__subtitle {
+  margin-top: var(--space-3xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* Resumo numérico do topo. */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat__label {
+  font-size: 10.5px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.stat--neon .stat__value { color: var(--color-neon); }
+.stat--success .stat__value { color: var(--color-success); }
+
+/* ==========================================================================
+   Grid de automações — 1 col mobile, 2 tablet, 3–4 desktop
+   ========================================================================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 620px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1560px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.grid__empty {
+  grid-column: 1 / -1;
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+/* ==========================================================================
+   Card de automação
+   ========================================================================== */
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: card-rise 520ms var(--ease-out) both;
+  animation-delay: var(--delay, 0ms);
+  transition: transform var(--transition-base), border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+/* Fio na cor da automação, no topo do card. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--card-color, var(--color-neon));
+  opacity: 0.8;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.card__top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+
+.card__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  color: var(--card-color, var(--color-neon));
+  background: color-mix(in srgb, var(--card-color, var(--color-neon)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--card-color, var(--color-neon)) 35%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.card__icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.card__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.card__title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+}
+
+.card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  margin-top: var(--space-3xs);
+}
+
+.card__menu {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.card__menu svg {
+  width: 16px;
+  height: 16px;
+}
+
+.card__description {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+  margin-top: auto;
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-border);
+}
+
+.card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.card__meta svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ==========================================================================
+   FAB — Nova automação
+   ========================================================================== */
+
+.fab {
+  position: fixed;
+  right: var(--space-md);
+  bottom: var(--space-md);
+  z-index: var(--z-fab);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  height: 56px;
+  padding: 0 var(--space-sm);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-inverse);
+  background: var(--gradient-neon);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--glow-neon), var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base),
+    opacity var(--transition-base);
+}
+
+.fab svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.fab:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.55), var(--shadow-lg);
+}
+
+.fab:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Com o drawer aberto o FAB sai de cena — ele flutuaria sobre o véu. */
+.is-drawer-open .fab {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+/* O rótulo só aparece quando há espaço. */
+.fab__label {
+  display: none;
+}
+
+@media (min-width: 620px) {
+  .fab {
+    padding-right: var(--space-md);
+  }
+
+  .fab__label {
+    display: inline;
+    white-space: nowrap;
+  }
+}
+
+/* ==========================================================================
+   Véu do drawer (mobile)
+   ========================================================================== */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-sidebar) - 1);
+  background: var(--color-overlay);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.scrim.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+/* Tablet: sidebar já entra recolhida por padrão. */
+@media (max-width: 1100px) and (min-width: 861px) {
+  .content {
+    padding: var(--space-md) var(--space-sm) var(--space-2xl);
+  }
+}
+
+/* Mobile: sidebar vira drawer sobreposto. */
+@media (max-width: 860px) {
+  .layout,
+  .layout.is-collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-100%);
+    transition: transform var(--transition-slow);
+  }
+
+  .sidebar.is-open {
+    transform: none;
+  }
+
+  /* No drawer nada fica recolhido: rótulos e seções voltam ao normal. */
+  .is-collapsed .sidebar__label {
+    opacity: 1;
+  }
+
+  .is-collapsed .sidebar__section {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: var(--space-2xs) var(--space-2xs) var(--space-3xs);
+    overflow: visible;
+    color: var(--color-text-muted);
+    background: none;
+  }
+
+  .is-collapsed .sidebar__top {
+    flex-direction: row;
+    padding-inline: var(--space-2xs);
+  }
+
+  .is-collapsed .sidebar__link {
+    justify-content: flex-start;
+  }
+
+  .is-collapsed .sidebar__footer {
+    display: block;
+  }
+
+  .sidebar__collapse {
+    display: none;
+  }
+
+  .header__drawer-toggle {
+    display: grid;
+  }
+
+  .header {
+    padding-inline: var(--space-sm);
+  }
+
+  .search__hint {
+    display: none;
+  }
+
+  .profile__name {
+    display: none;
+  }
+
+  .content {
+    padding: var(--space-sm) var(--space-sm) var(--space-2xl);
+  }
+}
+
+@media (max-width: 560px) {
+  .content__head {
+    align-items: flex-start;
+  }
+
+  .content__title {
+    font-size: var(--fs-xl);
+  }
+
+  .stats {
+    gap: var(--space-sm);
+  }
+
+  .fab {
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+  }
+}
+
+/* ==========================================================================
+   Acessibilidade: movimento reduzido
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .layout,
+  .sidebar,
+  .card,
+  .dropdown__panel {
+    transition: none;
+    animation: none;
+  }
+
+  .card {
+    opacity: 1;
+    transform: none;
+  }
+}

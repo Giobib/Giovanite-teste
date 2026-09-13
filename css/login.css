@@ -1,0 +1,407 @@
+/* ==========================================================================
+   Nexus Desk — login.css
+   Layout e atmosfera da tela de login (index.html).
+   Componentes (input, botão, checkbox) vivem em components.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   Palco
+   ========================================================================== */
+
+.page--login {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--space-md) var(--space-sm);
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Fundo animado: orbes de luz + malha técnica
+   ========================================================================== */
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+}
+
+.aurora__orb--cyan {
+  top: -18vh;
+  left: -10vw;
+  width: 55vw;
+  min-width: 380px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.55), transparent 68%);
+  animation: orb-drift-a 22s var(--ease-in-out) infinite alternate;
+}
+
+.aurora__orb--violet {
+  right: -14vw;
+  bottom: -22vh;
+  width: 52vw;
+  min-width: 360px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(123, 92, 255, 0.5), transparent 68%);
+  animation: orb-drift-b 26s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes orb-drift-a {
+  to {
+    transform: translate3d(9vw, 7vh, 0) scale(1.12);
+  }
+}
+
+@keyframes orb-drift-b {
+  to {
+    transform: translate3d(-8vw, -6vh, 0) scale(1.08);
+  }
+}
+
+/* Malha de linhas que some nas bordas. */
+.aurora__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(154, 168, 199, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(154, 168, 199, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 78%);
+}
+
+/* ==========================================================================
+   Cartão de vidro
+   ========================================================================== */
+
+.login {
+  position: relative;
+  z-index: var(--z-base);
+  width: 100%;
+  max-width: 920px;
+}
+
+.login__card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: card-in 700ms var(--ease-out) both;
+}
+
+/* Fio de luz no topo do cartão. */
+.login__card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-neon), var(--color-accent), transparent);
+  opacity: 0.85;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Painel esquerdo: marca e contexto
+   ========================================================================== */
+
+.login__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--gradient-surface);
+  border-right: 1px solid var(--glass-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-neon);
+  box-shadow: var(--glow-neon);
+}
+
+.brand__mark svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-inverse);
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.02em;
+}
+
+.login__tagline {
+  margin-top: auto;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.login__tagline em {
+  font-style: normal;
+  color: var(--color-neon);
+  text-shadow: 0 0 24px rgba(0, 240, 255, 0.4);
+}
+
+.login__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.login__features li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.login__features svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--color-neon);
+}
+
+.login__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.pulse {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-success);
+}
+
+.pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-success);
+  animation: pulse-ring 2s var(--ease-out) infinite;
+}
+
+@keyframes pulse-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Painel direito: formulário
+   ========================================================================== */
+
+.login__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.login__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+}
+
+.login__subtitle {
+  margin-top: var(--space-3xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.login__options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xs);
+}
+
+.login__feedback {
+  /* Visual em .alert; aqui só o comportamento de entrada. */
+  animation: fade-up 300ms var(--ease-out) both;
+}
+
+.login__hint {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.login__footer {
+  padding-top: var(--space-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ==========================================================================
+   Entrada escalonada dos elementos
+   ========================================================================== */
+
+.reveal {
+  animation: fade-up 560ms var(--ease-out) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+
+/* Tablet: o cartão vira uma coluna e o painel de marca encolhe. */
+@media (max-width: 860px) {
+  .login {
+    max-width: 460px;
+  }
+
+  .login__card {
+    grid-template-columns: 1fr;
+  }
+
+  .login__aside {
+    gap: var(--space-sm);
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .login__tagline {
+    margin-top: 0;
+    font-size: var(--fs-xl);
+  }
+
+  /* Conteúdo de apoio sai de cena para o formulário chegar antes. */
+  .login__features,
+  .login__status {
+    display: none;
+  }
+
+  .login__panel {
+    padding: var(--space-md);
+  }
+}
+
+/* Celular */
+@media (max-width: 480px) {
+  .page--login {
+    padding: var(--space-sm) var(--space-xs);
+  }
+
+  .login__aside {
+    padding: var(--space-md) var(--space-sm) var(--space-sm);
+  }
+
+  .login__panel {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .login__tagline {
+    font-size: var(--fs-lg);
+  }
+
+  .aurora__orb {
+    filter: blur(70px);
+    opacity: 0.4;
+  }
+}
+
+/* Telas baixas: menos respiro vertical. */
+@media (max-height: 700px) and (min-width: 861px) {
+  .login__aside,
+  .login__panel {
+    padding-block: var(--space-lg);
+  }
+}
+
+/* ==========================================================================
+   Acessibilidade: movimento reduzido
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora__orb,
+  .pulse::after {
+    animation: none;
+  }
+
+  .login__card,
+  .reveal,
+  .login__feedback {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

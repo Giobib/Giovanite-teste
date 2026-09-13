@@ -1,0 +1,8 @@
+{
+  "categorias": [
+    { "id": "infra", "nome": "Infraestrutura", "cor": "#00f0ff" },
+    { "id": "monitoramento", "nome": "Monitoramento", "cor": "#ff4d6d" },
+    { "id": "relatorios", "nome": "Relatórios", "cor": "#7b5cff" },
+    { "id": "integracoes", "nome": "Integrações", "cor": "#22e39a" }
+  ]
+}

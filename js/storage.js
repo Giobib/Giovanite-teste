@@ -12,7 +12,6 @@
     THEME: 'nexus:theme',
     SIDEBAR_COLLAPSED: 'nexus:sidebar-collapsed',
     AUTOMATIONS: 'nexus:automations',
-    ORDER: 'nexus:automations:order',
   };
 
   /** Lê e desserializa um valor; devolve `fallback` se ausente ou inválido. */

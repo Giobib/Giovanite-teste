@@ -1,5 +1,7 @@
 # Nexus Desk
 
+https://nexus-testemk2.netlify.app/dashboard.html
+
 Painel de automações construído **apenas com HTML5, CSS3 e JavaScript puro (ES6+)** —
 sem frameworks, sem build, sem dependências.
 

@@ -45,6 +45,9 @@
     setupDropdowns();
     setupKeyboardShortcuts();
 
+    // O CRUD recria os cards; o filtro em vigor precisa valer para os novos.
+    document.addEventListener('automations:rendered', filterCards);
+
     // Navegar no drawer fecha o drawer.
     $$('.sidebar__link').forEach((link) => {
       link.addEventListener('click', () => {
@@ -177,9 +180,18 @@
     });
 
     elements.empty.hidden = visible > 0;
-    elements.subtitle.textContent = term
-      ? `${visible} de ${cards.length} automações correspondem à busca.`
-      : `${cards.length} automações configuradas nesta conta.`;
+    elements.empty.textContent = cards.length
+      ? 'Nenhuma automação corresponde à busca.'
+      : 'Nenhuma automação ainda. Use o botão “Nova automação” para criar a primeira.';
+
+    if (term) {
+      elements.subtitle.textContent = `${visible} de ${cards.length} automações correspondem à busca.`;
+    } else {
+      elements.subtitle.textContent =
+        cards.length === 1
+          ? '1 automação configurada nesta conta.'
+          : `${cards.length} automações configuradas nesta conta.`;
+    }
   }
 
   /* ------------------------------------------------------------------ *

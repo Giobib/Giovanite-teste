@@ -250,198 +250,22 @@
           </div>
           <div class="stats">
             <div class="stat stat--neon">
-              <span class="stat__value">4</span>
+              <span class="stat__value" id="stat-active">0</span>
               <span class="stat__label">Ativas</span>
             </div>
-            <div class="stat stat--success">
-              <span class="stat__value">98,2%</span>
-              <span class="stat__label">Sucesso</span>
+            <div class="stat">
+              <span class="stat__value" id="stat-paused">0</span>
+              <span class="stat__label">Pausadas</span>
             </div>
             <div class="stat">
-              <span class="stat__value">247</span>
-              <span class="stat__label">Execuções hoje</span>
+              <span class="stat__value" id="stat-categories">0</span>
+              <span class="stat__label">Categorias</span>
             </div>
           </div>
         </div>
 
-        <!-- Cards estáticos (mock). O Prompt 4 troca por renderização via JS. -->
+        <!-- Os cards são renderizados por js/automations.js a partir do LocalStorage. -->
         <section class="grid" id="automations-grid" aria-label="Lista de automações">
-
-          <article class="card" style="--card-color: #00f0ff; --delay: 60ms"
-                   data-name="Backup diário" data-category="Infraestrutura">
-            <div class="card__top">
-              <span class="card__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <ellipse cx="12" cy="6" rx="7.5" ry="3"></ellipse>
-                  <path d="M4.5 6v12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"></path>
-                  <path d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"></path>
-                </svg>
-              </span>
-              <div class="card__heading">
-                <h2 class="card__title">Backup diário</h2>
-                <div class="card__badges">
-                  <span class="badge badge--neon">Infraestrutura</span>
-                  <span class="badge badge--muted">Agendada</span>
-                </div>
-              </div>
-              <button class="icon-button card__menu" type="button" aria-label="Ações de Backup diário">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="5" r="1.6"></circle>
-                  <circle cx="12" cy="12" r="1.6"></circle>
-                  <circle cx="12" cy="19" r="1.6"></circle>
-                </svg>
-              </button>
-            </div>
-            <p class="card__description">Copia os arquivos do projeto para o storage às 02h.</p>
-            <div class="card__footer">
-              <span class="card__meta">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 7v5l3.5 2"></path>
-                </svg>
-                há 3 h · 47 s
-              </span>
-              <label class="switch">
-                <input type="checkbox" checked aria-label="Ativar Backup diário">
-                <span class="switch__track" aria-hidden="true"></span>
-                <span>Ativa</span>
-              </label>
-            </div>
-          </article>
-
-          <article class="card" style="--card-color: #ff4d6d; --delay: 120ms"
-                   data-name="Alerta de falha" data-category="Monitoramento">
-            <div class="card__top">
-              <span class="card__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 8.5a6 6 0 1 0-12 0c0 5-2 6.5-2 6.5h16s-2-1.5-2-6.5Z"></path>
-                  <path d="M10.5 19a1.8 1.8 0 0 0 3 0"></path>
-                </svg>
-              </span>
-              <div class="card__heading">
-                <h2 class="card__title">Alerta de falha</h2>
-                <div class="card__badges">
-                  <span class="badge badge--danger">Monitoramento</span>
-                  <span class="badge badge--muted">Webhook</span>
-                </div>
-              </div>
-              <button class="icon-button card__menu" type="button" aria-label="Ações de Alerta de falha">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="5" r="1.6"></circle>
-                  <circle cx="12" cy="12" r="1.6"></circle>
-                  <circle cx="12" cy="19" r="1.6"></circle>
-                </svg>
-              </button>
-            </div>
-            <p class="card__description">Notifica o time no chat quando um job termina com erro.</p>
-            <div class="card__footer">
-              <span class="card__meta">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 7v5l3.5 2"></path>
-                </svg>
-                há 12 min · falhou
-              </span>
-              <label class="switch">
-                <input type="checkbox" checked aria-label="Ativar Alerta de falha">
-                <span class="switch__track" aria-hidden="true"></span>
-                <span>Ativa</span>
-              </label>
-            </div>
-          </article>
-
-          <article class="card" style="--card-color: #7b5cff; --delay: 180ms"
-                   data-name="Relatório semanal" data-category="Relatórios">
-            <div class="card__top">
-              <span class="card__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 20h16"></path>
-                  <path d="M7 20v-7M12 20V5M17 20v-10"></path>
-                </svg>
-              </span>
-              <div class="card__heading">
-                <h2 class="card__title">Relatório semanal</h2>
-                <div class="card__badges">
-                  <span class="badge badge--accent">Relatórios</span>
-                  <span class="badge badge--muted">Agendada</span>
-                </div>
-              </div>
-              <button class="icon-button card__menu" type="button" aria-label="Ações de Relatório semanal">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="5" r="1.6"></circle>
-                  <circle cx="12" cy="12" r="1.6"></circle>
-                  <circle cx="12" cy="19" r="1.6"></circle>
-                </svg>
-              </button>
-            </div>
-            <p class="card__description">Envia o resumo de execuções por e-mail toda segunda-feira.</p>
-            <div class="card__footer">
-              <span class="card__meta">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 7v5l3.5 2"></path>
-                </svg>
-                há 2 dias · 6 s
-              </span>
-              <label class="switch">
-                <input type="checkbox" aria-label="Ativar Relatório semanal">
-                <span class="switch__track" aria-hidden="true"></span>
-                <span>Pausada</span>
-              </label>
-            </div>
-          </article>
-
-          <article class="card" style="--card-color: #22e39a; --delay: 240ms"
-                   data-name="Sync de contatos" data-category="Integrações">
-            <div class="card__top">
-              <span class="card__icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 11.5A8 8 0 0 0 6 7L4 9"></path>
-                  <path d="M4 5v4h4"></path>
-                  <path d="M4 12.5A8 8 0 0 0 18 17l2-2"></path>
-                  <path d="M20 19v-4h-4"></path>
-                </svg>
-              </span>
-              <div class="card__heading">
-                <h2 class="card__title">Sync de contatos</h2>
-                <div class="card__badges">
-                  <span class="badge badge--success">Integrações</span>
-                  <span class="badge badge--muted">Webhook</span>
-                </div>
-              </div>
-              <button class="icon-button card__menu" type="button" aria-label="Ações de Sync de contatos">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <circle cx="12" cy="5" r="1.6"></circle>
-                  <circle cx="12" cy="12" r="1.6"></circle>
-                  <circle cx="12" cy="19" r="1.6"></circle>
-                </svg>
-              </button>
-            </div>
-            <p class="card__description">Espelha o CRM na planilha da equipe a cada 15 minutos.</p>
-            <div class="card__footer">
-              <span class="card__meta">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 7v5l3.5 2"></path>
-                </svg>
-                há 8 min · 2 s
-              </span>
-              <label class="switch">
-                <input type="checkbox" checked aria-label="Ativar Sync de contatos">
-                <span class="switch__track" aria-hidden="true"></span>
-                <span>Ativa</span>
-              </label>
-            </div>
-          </article>
-
           <p class="grid__empty" id="grid-empty" hidden>
             Nenhuma automação corresponde à busca.
           </p>
@@ -464,5 +288,6 @@
   <script src="js/router.js"></script>
   <script src="js/app.js"></script>
   <script src="js/dashboard.js"></script>
+  <script src="js/automations.js"></script>
 </body>
 </html>

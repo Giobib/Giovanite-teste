@@ -129,10 +129,19 @@ dashboard.html ──[botão "Sair"]──► limpa sessão ──────�
 Os cards podem ser reordenados de três formas, todas terminando na mesma
 gravação:
 
-- **Mouse** — HTML5 Drag and Drop API, arrastando o card.
-- **Toque** — Pointer Events pela alça do card. `touch-action: none` na alça
-  impede o navegador de rolar a página no lugar de arrastar; o resto da tela
-  continua rolando normalmente.
+- **Mouse** — Pointer Events, arrastando o card inteiro. Um limiar de 5px
+  separa arrastar de clicar para editar.
+- **Toque** — os mesmos Pointer Events, mas só pela alça do card:
+  `touch-action: none` na alça impede o navegador de rolar a página no lugar
+  de arrastar, e o resto da tela continua rolando normalmente.
 - **Teclado** — `Enter` na alça pega o card, as setas movem, `Enter` solta e
   `Esc` desfaz. Cada passo é anunciado por uma região `aria-live`.
+
+Enquanto se arrasta, o card sai do fluxo e vira um clone `position: fixed`
+que segue o ponteiro, com a vaga de origem tracejada no grid. A inclinação
+é uma mola de segunda ordem: o alvo vem da velocidade horizontal e a mola
+o persegue com aceleração e amortecimento, então o card passa do ponto,
+volta e assenta sozinho quando o ponteiro para. Os vizinhos deslizam para
+a nova posição por FLIP, em vez de teleportar. Com `prefers-reduced-motion`
+nada disso roda: a reordenação continua, sem animação.
 

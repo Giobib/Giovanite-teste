@@ -150,7 +150,7 @@
 
 .sidebar__link:hover {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--fill-hover);
 }
 
 /* Estado ativo: trilho neon à esquerda, fundo tênue e ícone aceso. */
@@ -250,7 +250,7 @@
   gap: var(--space-xs);
   min-height: var(--header-height);
   padding: var(--space-2xs) var(--space-md);
-  background: var(--color-overlay);
+  background: var(--header-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(150%);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
   border-bottom: 1px solid var(--glass-border);
@@ -271,7 +271,7 @@
   align-items: center;
   gap: var(--space-2xs);
   padding: 0 var(--space-xs);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--fill-subtle);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   transition: border-color var(--transition-base), box-shadow var(--transition-base);
@@ -319,6 +319,33 @@
   border-radius: var(--radius-sm);
 }
 
+/* Botão de tema: mostra o ícone do tema que será aplicado no clique. */
+.theme-toggle__sun,
+.theme-toggle__moon {
+  grid-area: 1 / 1;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+}
+
+.theme-toggle__sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+.theme-toggle[aria-pressed="true"] .theme-toggle__moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+}
+
+.theme-toggle[aria-pressed="true"] .theme-toggle__sun {
+  opacity: 1;
+  transform: none;
+}
+
 .header__actions {
   display: flex;
   align-items: center;
@@ -339,7 +366,7 @@
 
 .profile:hover,
 .profile[aria-expanded="true"] {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--fill-hover);
   border-color: var(--glass-border);
 }
 
@@ -373,7 +400,7 @@
 }
 
 .notification:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--fill-hover);
 }
 
 .notification__dot {
@@ -580,6 +607,16 @@
   line-height: var(--lh-tight);
 }
 
+/* Etiqueta de categoria: herda a cor da automação, escurecida no tema
+   claro para o texto não sumir sobre o branco. */
+.card__badges .badge--category {
+  color: var(--card-color, var(--color-neon));
+}
+
+:root[data-theme="light"] .card__badges .badge--category {
+  color: color-mix(in srgb, var(--card-color, var(--color-neon)) 62%, #0b1020);
+}
+
 .card__badges {
   display: flex;
   flex-wrap: wrap;
@@ -626,6 +663,45 @@
 .card__meta svg {
   width: 13px;
   height: 13px;
+}
+
+/* ==========================================================================
+   Arrastar e soltar
+   ========================================================================== */
+
+.card[draggable="true"] {
+  cursor: grab;
+}
+
+.card.is-dragging {
+  cursor: grabbing;
+  opacity: 0.45;
+  transform: scale(0.98);
+  border-color: var(--color-neon);
+  box-shadow: var(--glow-neon);
+}
+
+/* Enquanto se arrasta, os vizinhos deslizam para abrir espaço. */
+.grid:has(.is-dragging) .card:not(.is-dragging) {
+  transition: transform var(--transition-base);
+}
+
+.card__grip {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.card:hover .card__grip,
+.card:focus-within .card__grip {
+  opacity: 1;
+}
+
+.card__grip svg {
+  width: 15px;
+  height: 15px;
 }
 
 /* ==========================================================================
@@ -689,6 +765,17 @@
   .fab__label {
     display: inline;
     white-space: nowrap;
+  }
+}
+
+/* No painel os toasts sobem: o FAB ocupa o canto inferior direito. */
+.page--dashboard .toasts {
+  bottom: calc(var(--space-md) + 68px);
+}
+
+@media (max-width: 560px) {
+  .page--dashboard .toasts {
+    bottom: calc(var(--space-sm) + 68px);
   }
 }
 

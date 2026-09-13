@@ -3,6 +3,8 @@
  * CRUD de automações: modelo de dados, persistência no LocalStorage,
  * renderização dos cards e os modais de criar/editar e de exclusão.
  *
+ * Formatação, tema, skeleton e arrasto vêm de ui.js; os avisos, de toast.js.
+ *
  * O catálogo de categorias e a lista inicial existem também em /data como
  * JSON legível. A cópia autoritativa em tempo de execução é esta, porque
  * `fetch()` não funciona quando o projeto é aberto por file://.
@@ -10,8 +12,9 @@
 (function (global) {
   'use strict';
 
-  const { app, storage } = global.NexusDesk;
+  const { app, storage, ui, toast } = global.NexusDesk;
   const { $, $$ } = app;
+  const { escapeHtml, formatDate } = ui;
 
   /* ------------------------------------------------------------------ *
    * Catálogos
@@ -118,6 +121,20 @@
     },
 
     /**
+     * Reordena a lista conforme os ids recebidos. A ordem do array salvo
+     * é a ordem exibida — não há uma segunda chave só para isso.
+     */
+    reorder(ids) {
+      const byId = new Map(repo.all().map((item) => [item.id, item]));
+      const ordered = ids.map((id) => byId.get(id)).filter(Boolean);
+      // Qualquer item fora da lista recebida (corrida rara) vai para o fim.
+      byId.forEach((item, id) => {
+        if (!ids.includes(id)) ordered.push(item);
+      });
+      repo.saveAll(ordered);
+    },
+
+    /**
      * Semeia as automações mock na primeira visita.
      * O teste é pela ausência da chave, não pelo tamanho da lista: quem
      * apagou todas as automações não quer vê-las de volta no F5.
@@ -156,24 +173,7 @@
   }
 
   function iconSvg(name, className) {
-    const body = ICONS[name] || ICONS.zap;
-    return `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
-  }
-
-  /** Escapa texto vindo do usuário antes de entrar no HTML. */
-  function escapeHtml(value) {
-    return String(value).replace(/[&<>"']/g, (char) => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-    })[char]);
-  }
-
-  function formatDate(iso) {
-    return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+    return ui.svg(ICONS[name] || ICONS.zap, className);
   }
 
   /* ------------------------------------------------------------------ *
@@ -191,6 +191,16 @@
     grid.insertAdjacentHTML('afterbegin', html);
 
     updateStats(list);
+
+    // Cards são recriados a cada render: o arrasto precisa ser religado.
+    ui.makeSortable(grid, {
+      itemSelector: '.card',
+      onReorder(ids) {
+        repo.reorder(ids);
+        toast.info('Ordem salva.');
+      },
+    });
+
     // A busca do dashboard.js reaplica o filtro sobre os cards novos.
     document.dispatchEvent(new CustomEvent('automations:rendered'));
   }
@@ -208,10 +218,17 @@
           <div class="card__heading">
             <h2 class="card__title">${nome}</h2>
             <div class="card__badges">
-              <span class="badge" style="color: ${escapeHtml(automation.cor)}">${escapeHtml(categoryName(automation.categoria))}</span>
+              <span class="badge badge--category">${escapeHtml(categoryName(automation.categoria))}</span>
               <span class="badge badge--muted">${escapeHtml(actionName(automation.tipoAcao))}</span>
             </div>
           </div>
+          <span class="card__grip" aria-hidden="true" title="Arraste para reordenar">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/>
+              <circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/>
+              <circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/>
+            </svg>
+          </span>
           <button class="icon-button card__menu" type="button" data-action="delete"
                   aria-label="Excluir ${nome}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -378,8 +395,10 @@
 
       if (editing) {
         repo.update(automation.id, values);
+        toast.success(`“${values.nome}” foi atualizada.`);
       } else {
         repo.create(values);
+        toast.success(`“${values.nome}” foi criada.`);
       }
 
       render();
@@ -433,6 +452,7 @@
     $('form', dialog).addEventListener('submit', (event) => {
       event.preventDefault();
       repo.remove(automation.id);
+      toast.error(`“${automation.nome}” foi excluída.`);
       render();
       close(dialog);
     });
@@ -471,7 +491,14 @@
     if (!grid) return;
 
     repo.seedIfEmpty();
-    render();
+
+    // Skeleton curto no primeiro carregamento: o LocalStorage é instantâneo,
+    // mas a tela sem estado intermediário "pisca" os cards na cara do usuário.
+    ui.skeleton.cards(grid, Math.min(repo.all().length || 3, 4));
+    global.setTimeout(() => {
+      ui.skeleton.clear(grid);
+      render();
+    }, 520);
 
     $('#new-automation').addEventListener('click', () => openForm());
 
@@ -499,7 +526,8 @@
       if (!toggle) return;
 
       const card = toggle.closest('.card');
-      repo.update(card.dataset.id, { ativa: toggle.checked });
+      const automation = repo.update(card.dataset.id, { ativa: toggle.checked });
+      toast.info(`“${automation.nome}” foi ${toggle.checked ? 'ativada' : 'pausada'}.`);
       render();
     });
   }

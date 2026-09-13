@@ -9,7 +9,7 @@
 (function (global) {
   'use strict';
 
-  const { app, auth, router, storage } = global.NexusDesk;
+  const { app, auth, router, storage, ui, toast } = global.NexusDesk;
   const { $, $$ } = app;
 
   const MOBILE_QUERY = '(max-width: 860px)';
@@ -31,6 +31,7 @@
       empty: $('#grid-empty'),
       subtitle: $('.content__subtitle'),
       logout: $('#logout-button'),
+      themeToggle: $('#theme-toggle'),
     };
 
     showCurrentUser();
@@ -41,6 +42,16 @@
     elements.scrim.addEventListener('click', () => setDrawerOpen(false));
     elements.logout.addEventListener('click', handleLogout);
     elements.search.addEventListener('input', filterCards);
+
+    // O tema é do ui.js; aqui só ligamos o botão e avisamos a troca.
+    let firstRun = true;
+    ui.theme.bindToggle(elements.themeToggle, (value) => {
+      if (firstRun) {
+        firstRun = false;
+        return;
+      }
+      toast.info(`Tema ${value === 'light' ? 'claro' : 'escuro'} aplicado.`);
+    });
 
     setupDropdowns();
     setupKeyboardShortcuts();

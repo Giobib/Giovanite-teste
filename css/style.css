@@ -134,6 +134,12 @@ table {
   --color-text-muted: #9aa8c7;
   --color-text-inverse: #05070d;
 
+  /* ---- Preenchimentos de superfície (campos, hovers, faixas) ---- */
+  --fill-subtle: rgba(255, 255, 255, 0.04);
+  --fill-hover: rgba(255, 255, 255, 0.06);
+  --fill-strong: rgba(255, 255, 255, 0.1);
+  --header-bg: rgba(8, 11, 20, 0.72);
+
   /* ---- Bordas e divisores ---- */
   --color-border: rgba(154, 168, 199, 0.18);
   --color-border-strong: rgba(154, 168, 199, 0.32);
@@ -236,8 +242,15 @@ table {
   --color-text-muted: #5b6780;
   --color-text-inverse: #ffffff;
 
+  --fill-subtle: rgba(19, 26, 43, 0.04);
+  --fill-hover: rgba(19, 26, 43, 0.07);
+  --fill-strong: rgba(19, 26, 43, 0.1);
+  --header-bg: rgba(255, 255, 255, 0.78);
+
   --color-border: rgba(19, 26, 43, 0.14);
   --color-border-strong: rgba(19, 26, 43, 0.26);
+
+  --gradient-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 247, 253, 0.6) 100%);
 
   --shadow-sm: 0 2px 8px rgba(19, 26, 43, 0.08);
   --shadow-md: 0 8px 24px rgba(19, 26, 43, 0.12);
@@ -248,6 +261,7 @@ table {
 /* Aplicação mínima dos tokens ao documento (sem design de componentes). */
 body {
   font-family: var(--font-sans);
+  transition: background-color var(--transition-base), color var(--transition-base);
   font-size: var(--fs-md);
   line-height: var(--lh-base);
   color: var(--color-text);

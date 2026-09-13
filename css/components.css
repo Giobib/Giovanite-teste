@@ -1,5 +1,364 @@
 /* ==========================================================================
    Nexus Desk — components.css
-   Componentes reutilizáveis entre telas (botões, inputs, modais, toasts,
-   skeletons). Placeholder: preenchido a partir do Prompt 4/5.
+   Componentes reutilizáveis entre as telas. Consome apenas as variáveis
+   declaradas em style.css — nenhum valor mágico aqui.
    ========================================================================== */
+
+/* ==========================================================================
+   Campo de formulário (.field)
+   ========================================================================== */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.field__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Moldura que agrupa ícone + input + ação (ex.: mostrar senha). */
+.field__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 0 var(--space-xs);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base),
+    background-color var(--transition-base);
+}
+
+.field__control:hover {
+  border-color: var(--color-border-strong);
+}
+
+.field__control:focus-within {
+  background: rgba(0, 240, 255, 0.05);
+  border-color: var(--color-neon);
+  box-shadow: 0 0 0 3px var(--color-neon-soft), var(--glow-neon);
+}
+
+.field__icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  transition: color var(--transition-base);
+}
+
+.field__control:focus-within .field__icon {
+  color: var(--color-neon);
+}
+
+.field__input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-xs) 0;
+  font-size: var(--fs-md);
+  color: var(--color-text);
+}
+
+.field__input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.65;
+}
+
+/* O anel de foco vive na moldura, não no input. */
+.field__input:focus-visible {
+  outline: none;
+}
+
+/* Remove o ícone nativo de "revelar senha" do Edge, que duplicaria o nosso. */
+.field__input::-ms-reveal {
+  display: none;
+}
+
+/* Botão de ação dentro do campo (mostrar/ocultar senha). */
+.field__action {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.field__action:hover {
+  color: var(--color-neon);
+  background: var(--color-neon-soft);
+}
+
+.field__action svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Estado de erro */
+.field--invalid .field__control {
+  border-color: var(--color-danger);
+}
+
+.field--invalid .field__control:focus-within {
+  background: rgba(255, 77, 109, 0.06);
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.18);
+}
+
+.field--invalid .field__icon {
+  color: var(--color-danger);
+}
+
+.field__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  min-height: 1.1rem;
+  font-size: var(--fs-xs);
+  color: var(--color-danger);
+}
+
+.field__error:empty {
+  display: none;
+}
+
+/* ==========================================================================
+   Botão (.button)
+   ========================================================================== */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-md);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform var(--transition-fast), border-color var(--transition-base),
+    box-shadow var(--transition-base), background-color var(--transition-base);
+}
+
+.button:hover {
+  border-color: var(--color-neon);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* Variante primária: preenchida em neon, com brilho e varredura no hover. */
+.button--primary {
+  color: var(--color-text-inverse);
+  background: var(--color-neon);
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.22);
+}
+
+.button--primary:hover:not([disabled]) {
+  background: var(--color-neon-strong);
+  box-shadow: var(--glow-neon), 0 10px 28px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.button--primary:active:not([disabled]) {
+  transform: translateY(0);
+}
+
+/* Varredura de luz que cruza o botão no hover. */
+.button--primary::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -60%;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-18deg);
+  opacity: 0;
+  transition: none;
+}
+
+.button--primary:hover:not([disabled])::after {
+  animation: button-sheen 700ms var(--ease-out);
+}
+
+@keyframes button-sheen {
+  from {
+    left: -60%;
+    opacity: 0.9;
+  }
+  to {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+.button--block {
+  width: 100%;
+}
+
+/* Estado de carregamento: troca o rótulo pelo spinner. */
+.button__spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(5, 7, 13, 0.28);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+.button.is-loading .button__spinner {
+  display: block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   Checkbox (.checkbox)
+   ========================================================================== */
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--transition-fast);
+}
+
+.checkbox:hover {
+  color: var(--color-text);
+}
+
+/* Input nativo escondido, mas ainda focável e acessível. */
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox__box {
+  position: relative;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.checkbox__box::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--color-text-inverse);
+  border-bottom: 2px solid var(--color-text-inverse);
+  transform: rotate(-45deg) scale(0.4);
+  opacity: 0;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.checkbox input:checked + .checkbox__box {
+  background: var(--color-neon);
+  border-color: var(--color-neon);
+  box-shadow: var(--glow-neon);
+}
+
+.checkbox input:checked + .checkbox__box::after {
+  opacity: 1;
+  transform: rotate(-45deg) scale(1);
+}
+
+.checkbox input:focus-visible + .checkbox__box {
+  outline: 2px solid var(--color-neon);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Link (.link)
+   ========================================================================== */
+
+.link {
+  position: relative;
+  font-size: var(--fs-sm);
+  color: var(--color-neon);
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+}
+
+.link:hover {
+  color: var(--color-neon-strong);
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.45);
+}
+
+.link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ==========================================================================
+   Alerta inline (.alert) — usado no feedback do login
+   ========================================================================== */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-xs);
+  font-size: var(--fs-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.alert--success {
+  color: var(--color-success);
+  background: rgba(34, 227, 154, 0.1);
+  border-color: rgba(34, 227, 154, 0.35);
+}
+
+.alert--error {
+  color: var(--color-danger);
+  background: rgba(255, 77, 109, 0.1);
+  border-color: rgba(255, 77, 109, 0.35);
+}

@@ -7,48 +7,146 @@
   <title>Nexus Desk — Login</title>
 
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body class="page page--login">
 
+  <!-- Atmosfera: orbes de luz e malha técnica. Puramente decorativo. -->
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__orb aurora__orb--cyan"></span>
+    <span class="aurora__orb aurora__orb--violet"></span>
+    <div class="aurora__grid"></div>
+  </div>
+
   <main class="login">
-    <section class="login__card" aria-labelledby="login-title">
-      <header class="login__header">
-        <h1 id="login-title" class="login__brand">Nexus Desk</h1>
-        <p class="login__subtitle">Entre para acessar seu painel de automações.</p>
-      </header>
+    <section class="login__card">
 
-      <form id="login-form" class="login__form" novalidate>
-        <div class="field">
-          <label class="field__label" for="email">E-mail</label>
-          <input class="field__input" type="email" id="email" name="email"
-                 autocomplete="email" placeholder="voce@empresa.com" required>
+      <!-- Painel de marca -->
+      <aside class="login__aside">
+        <div class="brand reveal" style="--delay: 80ms">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 19V5l14 14V5"></path>
+            </svg>
+          </span>
+          <h1 class="brand__name">Nexus Desk</h1>
         </div>
 
-        <div class="field">
-          <label class="field__label" for="password">Senha</label>
-          <input class="field__input" type="password" id="password" name="password"
-                 autocomplete="current-password" placeholder="••••••••" required>
-        </div>
+        <p class="login__tagline reveal" style="--delay: 160ms">
+          Suas automações em <em>um só painel</em>.
+        </p>
 
-        <div class="login__options">
-          <label class="checkbox" for="remember">
-            <input type="checkbox" id="remember" name="remember">
-            <span>Lembrar-me</span>
-          </label>
-          <a class="link" href="#">Esqueci minha senha</a>
-        </div>
+        <ul class="login__features reveal" style="--delay: 240ms">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            Agende rotinas e dispare por webhook
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            Acompanhe cada execução em tempo real
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            Receba alertas quando algo falhar
+          </li>
+        </ul>
 
-        <button class="button button--primary" type="submit">Entrar</button>
+        <p class="login__status reveal" style="--delay: 320ms">
+          <span class="pulse" aria-hidden="true"></span>
+          128 automações rodando agora
+        </p>
+      </aside>
 
-        <p id="login-feedback" class="login__feedback" role="status" aria-live="polite" hidden></p>
-      </form>
+      <!-- Painel do formulário -->
+      <div class="login__panel">
+        <header class="reveal" style="--delay: 200ms">
+          <h2 class="login__title">Entrar</h2>
+          <p class="login__subtitle">Acesse seu painel de automações.</p>
+        </header>
 
-      <footer class="login__footer">
-        <p>Não tem conta? <a class="link" href="#">Criar conta</a></p>
-      </footer>
+        <form id="login-form" class="login__form" novalidate>
+
+          <div class="field reveal" id="field-email" style="--delay: 280ms">
+            <label class="field__label" for="email">E-mail</label>
+            <div class="field__control">
+              <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2.5" y="4.5" width="19" height="15" rx="2.5"></rect>
+                <path d="m3 7 9 6 9-6"></path>
+              </svg>
+              <input class="field__input" type="email" id="email" name="email"
+                     autocomplete="email" placeholder="voce@empresa.com"
+                     aria-describedby="email-error" required>
+            </div>
+            <p class="field__error" id="email-error" role="alert"></p>
+          </div>
+
+          <div class="field reveal" id="field-password" style="--delay: 340ms">
+            <label class="field__label" for="password">Senha</label>
+            <div class="field__control">
+              <svg class="field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="10.5" width="16" height="10" rx="2.5"></rect>
+                <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path>
+              </svg>
+              <input class="field__input" type="password" id="password" name="password"
+                     autocomplete="current-password" placeholder="••••••••"
+                     aria-describedby="password-error" required>
+              <button class="field__action" type="button" id="toggle-password"
+                      aria-label="Mostrar senha" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12Z"></path>
+                  <circle cx="12" cy="12" r="2.8"></circle>
+                </svg>
+              </button>
+            </div>
+            <p class="field__error" id="password-error" role="alert"></p>
+          </div>
+
+          <div class="login__options reveal" style="--delay: 400ms">
+            <label class="checkbox" for="remember">
+              <input type="checkbox" id="remember" name="remember">
+              <span class="checkbox__box" aria-hidden="true"></span>
+              <span>Lembrar-me</span>
+            </label>
+            <a class="link" href="#">Esqueci minha senha</a>
+          </div>
+
+          <button class="button button--primary button--block reveal" type="submit"
+                  id="submit-button" style="--delay: 460ms">
+            <span class="button__spinner" aria-hidden="true"></span>
+            <span class="button__label">Entrar</span>
+          </button>
+
+          <p id="login-feedback" class="login__feedback alert" role="status" aria-live="polite" hidden></p>
+
+          <p class="login__hint reveal" style="--delay: 520ms">
+            Demonstração: qualquer e-mail válido e uma senha de 6+ caracteres entram.
+          </p>
+        </form>
+
+        <footer class="login__footer reveal" style="--delay: 580ms">
+          Não tem conta? <a class="link" href="#">Criar conta</a>
+        </footer>
+      </div>
+
     </section>
   </main>
 

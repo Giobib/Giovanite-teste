@@ -8,6 +8,7 @@
 
   const KEYS = {
     SESSION: 'nexus:session',
+    REMEMBERED_EMAIL: 'nexus:remembered-email',
     THEME: 'nexus:theme',
     AUTOMATIONS: 'nexus:automations',
     ORDER: 'nexus:automations:order',

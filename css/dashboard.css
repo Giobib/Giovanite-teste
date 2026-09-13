@@ -687,21 +687,59 @@
 }
 
 .card__grip {
-  display: flex;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
   color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  /* Sem isto o navegador rola a página em vez de deixar o dedo arrastar. */
+  touch-action: none;
   opacity: 0;
-  transition: opacity var(--transition-fast), color var(--transition-fast);
+  transition: opacity var(--transition-fast), color var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .card:hover .card__grip,
-.card:focus-within .card__grip {
+.card:focus-within .card__grip,
+.card__grip:focus-visible {
   opacity: 1;
+}
+
+/* Em telas sem cursor a alça é o único jeito de reordenar: fica sempre à vista. */
+@media (hover: none) {
+  .card__grip {
+    opacity: 1;
+  }
+}
+
+.card__grip:hover {
+  color: var(--color-neon);
+  background: var(--color-neon-soft);
+}
+
+.card__grip:active {
+  cursor: grabbing;
 }
 
 .card__grip svg {
   width: 15px;
   height: 15px;
+}
+
+/* Card "pego" pelo teclado: acompanha as setas até o Enter. */
+.card.is-grabbed {
+  border-color: var(--color-neon);
+  box-shadow: var(--glow-neon), var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.card.is-grabbed .card__grip {
+  opacity: 1;
+  color: var(--color-neon);
+  background: var(--color-neon-soft);
 }
 
 /* ==========================================================================

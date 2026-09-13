@@ -1,7 +1,7 @@
 /* ==========================================================================
    Nexus Desk — login.css
-   Layout e atmosfera da tela de login (index.html).
-   Componentes (input, botão, checkbox) vivem em components.css.
+   Layout da tela de login (index.html).
+   Componentes e a atmosfera (.aurora) vivem em components.css.
    ========================================================================== */
 
 /* ==========================================================================
@@ -15,69 +15,6 @@
   min-height: 100dvh;
   padding: var(--space-md) var(--space-sm);
   overflow-x: hidden;
-}
-
-/* ==========================================================================
-   Fundo animado: orbes de luz + malha técnica
-   ========================================================================== */
-
-.aurora {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.aurora__orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.5;
-}
-
-.aurora__orb--cyan {
-  top: -18vh;
-  left: -10vw;
-  width: 55vw;
-  min-width: 380px;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.55), transparent 68%);
-  animation: orb-drift-a 22s var(--ease-in-out) infinite alternate;
-}
-
-.aurora__orb--violet {
-  right: -14vw;
-  bottom: -22vh;
-  width: 52vw;
-  min-width: 360px;
-  aspect-ratio: 1;
-  background: radial-gradient(circle, rgba(123, 92, 255, 0.5), transparent 68%);
-  animation: orb-drift-b 26s var(--ease-in-out) infinite alternate;
-}
-
-@keyframes orb-drift-a {
-  to {
-    transform: translate3d(9vw, 7vh, 0) scale(1.12);
-  }
-}
-
-@keyframes orb-drift-b {
-  to {
-    transform: translate3d(-8vw, -6vh, 0) scale(1.08);
-  }
-}
-
-/* Malha de linhas que some nas bordas. */
-.aurora__grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(154, 168, 199, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(154, 168, 199, 0.07) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 20%, transparent 78%);
 }
 
 /* ==========================================================================
@@ -137,35 +74,6 @@
   padding: var(--space-xl) var(--space-lg);
   background: var(--gradient-surface);
   border-right: 1px solid var(--glass-border);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2xs);
-}
-
-.brand__mark {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
-  background: var(--gradient-neon);
-  box-shadow: var(--glow-neon);
-}
-
-.brand__mark svg {
-  width: 22px;
-  height: 22px;
-  color: var(--color-text-inverse);
-}
-
-.brand__name {
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.02em;
 }
 
 .login__tagline {
@@ -373,10 +281,6 @@
     font-size: var(--fs-lg);
   }
 
-  .aurora__orb {
-    filter: blur(70px);
-    opacity: 0.4;
-  }
 }
 
 /* Telas baixas: menos respiro vertical. */
@@ -392,7 +296,6 @@
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora__orb,
   .pulse::after {
     animation: none;
   }
